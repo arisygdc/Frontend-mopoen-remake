@@ -22,6 +22,8 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
+import Sensor from "views/Sensor";
+import DaftarMonitoring from 'views/daftar-monitoring';
 
 var routes = [
   {
@@ -72,6 +74,20 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: Register,
     layout: "/auth",
+  },
+  {
+    path: "/monitoring",
+    name: "Monitoring",
+    icon: "ni ni-tv-2 text-primary",
+    component: Sensor,
+    layout: "/admin",
+  },
+  {
+    path: "/monitoring-request",
+    name: "Ajukan Monitoring",
+    icon: "ni ni-single-02 text-yellow",
+    component: DaftarMonitoring,
+    layout: "/admin",
   },
 ];
 export default routes;

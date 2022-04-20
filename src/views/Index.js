@@ -48,9 +48,6 @@ import {
 
 import Header from "components/Headers/Header.js";
 
-import api from '../api/monitoringData';
-import useAxios from "hooks/useAxios";
-
 const Index = (props) => {
   const [activeNav, setActiveNav] = useState(1);
   const [chartExample1Data, setChartExample1Data] = useState("data1");
@@ -65,18 +62,6 @@ const Index = (props) => {
     setChartExample1Data("data" + index);
   };
 
-  const Monitoring = () => {
-    const [monitoring, error, loading] = useAxios({
-      axiosInstance: api,
-      method: 'GET',
-      url:'/api/v1/sensor',
-      requestConfig: {
-        headers: {
-          'Content-Language': 'en-US'
-        }
-      }
-    })
-  }
   return (
     <>
       <Header />
