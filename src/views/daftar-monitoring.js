@@ -36,7 +36,11 @@ const DaftarMonitoring = () => {
         keterangan: "",
     })
 
-    const [lokContext, setLok] = useState([])
+    const [lokContext, setLok] = useState({
+        // loading: true,
+        // error: '',
+        data: []
+    })
 
     const PostForm = (e) => {
         e.preventDefault();
@@ -56,9 +60,13 @@ const DaftarMonitoring = () => {
 
     const FetchLocation = async (e) => {
         const newData={...lokContext}
+        // const [d, err, l] = CosumeApi(api, '/api/v1/lokasi/kabupaten?depends=' + e.target.value)
         const resp = await api.get('/api/v1/lokasi/kabupaten?depends=' + e.target.value)
-        newData['kabupaten'] = resp.data
+        // newData['loading'] = l
+        // newData['error'] = err
+        newData['data'] = resp.data.data
         setLok(newData)
+        console.log(newData['data'])
     }
 
     
@@ -127,8 +135,13 @@ const DaftarMonitoring = () => {
                             <select
                                 className="form-control"
                                 id="kabupaten">
-                                {lokContext?.length && 
-                                    lokContext.map((kab, i) => <option value={kab.id} key={i}>{`${kab.nama}`}</option>)
+                                {/* {lokContext['loading'] && <option>Loading Provinsi Data...</option>}
+                                {!lokContext['loading'] && lokContext['error'] && <option>{lokContext['error']}</option>} */}
+                                {/* {!lokContext['loading'] && !lokContext['error'] && lokContext['data']?.length && 
+                                    lokContext['data'].map((kab, i) => <option value={kab.id} key={i}>{`${kab.nama}`}</option>)
+                                } */}
+                                {lokContext['data']?.length && 
+                                    lokContext['data'].map((kab, i) => <option value={kab.id} key={i}>{`${kab.nama}`}</option>)
                                 }
                             </select>
                             </FormGroup>
