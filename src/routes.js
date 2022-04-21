@@ -22,7 +22,7 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
-import Sensor from "views/Sensor";
+import SensorAngin from "views/sensor-angin";
 import DaftarMonitoring from 'views/daftar-monitoring';
 
 var routes = [
@@ -76,10 +76,10 @@ var routes = [
     layout: "/auth",
   },
   {
-    path: "/monitoring",
-    name: "Monitoring",
+    path: "/sensor/angin",
+    name: "Sensor-Angin",
     icon: "ni ni-tv-2 text-primary",
-    component: Sensor,
+    component: SensorAngin,
     layout: "/admin",
   },
   {
