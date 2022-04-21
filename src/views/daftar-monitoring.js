@@ -28,26 +28,31 @@ const DaftarMonitoring = () => {
 
     const [mData, mError, mLoading] = CosumeApi(api, '/api/v1/sensors')
     const [pData, pError, pLoading] = CosumeApi(api, '/api/v1/lokasi/provinsi')
+    const lokSelector = {
+        kabupaten: 'kabupaten',
+        kecamatan: 'kecamatan',
+        desa: 'desa'
+    }
 
     const [FormContext, setData] = useState({
         tipe_sensor: 0,
-        lokasi_id: 0,
-        nama: "",
+        desa: 0,
+        nama_monitoring: "",
         keterangan: "",
     })
 
     const [lokContext, setLok] = useState({
-        // loading: true,
-        // error: '',
-        data: []
+        kabupaten: [],
+        kecamatan: [],
+        desa: []
     })
 
     const PostForm = (e) => {
         e.preventDefault();
         api.post('/api/v1/monitoring/daftar', {
             tipe_sensor: parseInt(FormContext.tipe_sensor),
-            lokasi_id: parseInt(FormContext.lokasi_id),
-            nama: FormContext.nama,
+            lokasi_id: parseInt(FormContext.desa),
+            nama: FormContext.nama_monitoring,
             keterangan: FormContext.keterangan,
         })
     }
@@ -56,17 +61,14 @@ const DaftarMonitoring = () => {
         const newData={...FormContext}
         newData[e.target.id] = e.target.value
         setData(newData)
+        console.log(newData)
     }
 
-    const FetchLocation = async (e) => {
+    const FetchLokasi = async (e, lokType) => {
         const newData={...lokContext}
-        // const [d, err, l] = CosumeApi(api, '/api/v1/lokasi/kabupaten?depends=' + e.target.value)
-        const resp = await api.get('/api/v1/lokasi/kabupaten?depends=' + e.target.value)
-        // newData['loading'] = l
-        // newData['error'] = err
-        newData['data'] = resp.data.data
+        const resp = await api.get('/api/v1/lokasi/' + lokType +'?depends=' + e.target.value)
+        newData[lokType] = resp.data.data
         setLok(newData)
-        console.log(newData['data'])
     }
 
     
@@ -89,7 +91,7 @@ const DaftarMonitoring = () => {
                         onClick={(e) => PostForm(e)}
                         size="sm"
                         >
-                        Settings
+                        Kirim
                         </Button>
                     </Col>
                     </Row>
@@ -116,7 +118,7 @@ const DaftarMonitoring = () => {
                             {!pLoading && !pError && pData?.data.length && <select
                                     className="form-control"
                                     id="provinsi"
-                                    onChange={(e) => FetchLocation(e)}
+                                    onChange={(e) => FetchLokasi(e, lokSelector.kabupaten)}
                                     >
                                     <option>-</option>
                                     {pData.data.map((provinsi, i) => <option value={provinsi.id} key={i}>{`${provinsi.nama}`}</option>)}
@@ -132,18 +134,15 @@ const DaftarMonitoring = () => {
                             >
                                 Kabupaten
                             </label>
-                            <select
-                                className="form-control"
-                                id="kabupaten">
-                                {/* {lokContext['loading'] && <option>Loading Provinsi Data...</option>}
-                                {!lokContext['loading'] && lokContext['error'] && <option>{lokContext['error']}</option>} */}
-                                {/* {!lokContext['loading'] && !lokContext['error'] && lokContext['data']?.length && 
-                                    lokContext['data'].map((kab, i) => <option value={kab.id} key={i}>{`${kab.nama}`}</option>)
-                                } */}
-                                {lokContext['data']?.length && 
-                                    lokContext['data'].map((kab, i) => <option value={kab.id} key={i}>{`${kab.nama}`}</option>)
-                                }
+                            {!lokContext[lokSelector.kabupaten].length && <p>Menunggu memilih provinsi</p>}
+
+                            {lokContext[lokSelector.kabupaten]?.length !== 0 && 
+                            <select className="form-control"id="kabupaten" onChange={(e) => FetchLokasi(e, lokSelector.kecamatan)}>
+                                <option>-</option>
+                                {lokContext[lokSelector.kabupaten].map((kab, i) => <option value={kab.id} key={i}>{`${kab.nama}`}</option>)}
                             </select>
+                            }
+
                             </FormGroup>
                         </Col>
                         </Row>
@@ -156,13 +155,14 @@ const DaftarMonitoring = () => {
                             >
                                 Kecamatan
                             </label>
-                            <Input
-                                className="form-control-alternative"
-                                defaultValue="Lucky"
-                                id="input-first-name"
-                                placeholder="First name"
-                                type="text"
-                            />
+                            {!lokContext[lokSelector.kecamatan].length && <p>Menunggu memilih kabupaten</p>}
+
+                            {lokContext[lokSelector.kecamatan]?.length !== 0 && 
+                            <select className="form-control"id="kecamatan" onChange={(e) => FetchLokasi(e, lokSelector.desa)}>
+                                <option>-</option>
+                                {lokContext[lokSelector.kecamatan].map((kab, i) => <option value={kab.id} key={i}>{`${kab.nama}`}</option>)}
+                            </select>
+                            }
                             </FormGroup>
                         </Col>
                         <Col lg="6">
@@ -173,13 +173,14 @@ const DaftarMonitoring = () => {
                             >
                                 Desa
                             </label>
-                            <Input
-                                className="form-control-alternative"
-                                id="lokasi_id"
-                                placeholder="desa"
-                                type="number"
-                                onChange={(e) => ChangeForm(e)}
-                            />
+                            {!lokContext[lokSelector.desa].length && <p>Menunggu memilih kecamatan</p>}
+
+                            {lokContext[lokSelector.desa]?.length !== 0 && 
+                            <select className="form-control"id="desa" onChange={(e) => ChangeForm(e)}>
+                                <option>-</option>
+                                {lokContext[lokSelector.desa].map((kab, i) => <option value={kab.id} key={i}>{`${kab.nama}`}</option>)}
+                            </select>
+                            }
                             </FormGroup>
                         </Col>
                         </Row>
@@ -195,14 +196,14 @@ const DaftarMonitoring = () => {
                             <FormGroup>
                             <label
                                 className="form-control-label"
-                                htmlFor="input-country"
+                                htmlFor="nama_monitoring"
                             >
                                 Nama Monitoring
                             </label>
                             <Input
                                 className="form-control-alternative"
-                                id="nama"
-                                placeholder="Postal code"
+                                id="namaMonitoring"
+                                placeholder="Nama untuk identitas monitoring"
                                 type="text"
                                 onChange={(e) => ChangeForm(e)}
                             />
@@ -212,7 +213,7 @@ const DaftarMonitoring = () => {
                             <FormGroup>
                             <label
                                 className="form-control-label"
-                                htmlFor="input-city"
+                                htmlFor="tipe_sensor"
                             >
                                 Sensor
                             </label>
@@ -226,6 +227,7 @@ const DaftarMonitoring = () => {
                                         id="tipe_sensor"
                                         placeholder="tipe sensor"
                                         onChange={(e) => ChangeForm(e)}>
+                                        <option>-</option>
                                         {mData.data.map((sensor, i) => <option value={sensor.id} key={i}>{`${sensor.tipe}`}</option>)}
                                     </select>
                                 }
@@ -239,15 +241,14 @@ const DaftarMonitoring = () => {
                             <FormGroup>
                             <label
                                 className="form-control-label"
-                                htmlFor="input-country"
+                                htmlFor="keterangan"
                             >
-                                Country
+                                Keterangan
                             </label>
                             <Input
                                 className="form-control-alternative"
-                                defaultValue="United States"
                                 id="keterangan"
-                                placeholder="Country"
+                                placeholder="keterangan lebih lanjut tentang monitoring"
                                 type="text"
                                 onChange={(e) => ChangeForm(e)}
                             />
