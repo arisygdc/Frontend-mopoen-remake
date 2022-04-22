@@ -21,18 +21,15 @@ import classnames from "classnames";
 // javascipt plugin for creating charts
 import Chart from "chart.js";
 // react plugin used to create charts
-import { Line, Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 
 import {
-    Button,
     Card,
     CardHeader,
     CardBody,
     NavItem,
     NavLink,
     Nav,
-    Progress,
-    Table,
     Container,
     Row,
     Col,
@@ -42,7 +39,7 @@ import {
     chartOptions,
     parseOptions,
     chartExample1,
-    chartExample2,
+    // chartExample2,
   } from "variables/charts.js";
   
 

@@ -202,7 +202,7 @@ const DaftarMonitoring = () => {
                             </label>
                             <Input
                                 className="form-control-alternative"
-                                id="namaMonitoring"
+                                id="nama_monitoring"
                                 placeholder="Nama untuk identitas monitoring"
                                 type="text"
                                 onChange={(e) => ChangeForm(e)}
