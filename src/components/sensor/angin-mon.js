@@ -22,6 +22,7 @@ import {
     Button,
     Table,
     Container,
+    CardBody,
     Row,
     Col,
 } from "reactstrap";
@@ -30,17 +31,24 @@ import useAxios from 'hooks/useAxios';
 import api from 'api/monitoring';
 
 const AnginMon = (uuid) => {
-    const [data, error, loading] = useAxios({
+    const [monitoring, monError, monLoading] = useAxios({
         axiosInstance: api,
         method: 'GET',
         url: 'api/v1/monitoring/value?uuid=' + uuid,
     });
 
+    const [identity, idyError, idyLoading] = useAxios({
+        axiosInstance: api,
+        method: 'GET',
+        url: 'api/v1/monitoring/terdaftar?uuid=' + uuid,
+    });
+
+    console.log(identity)
     return (
         <>
             <Container className="mt--7" fluid>
             <Row className="mt-5">
-                <Col className="mb-5 mb-xl-0" xl="8">
+                <Col className="mb-5 mb-xl-0" xl="6">
                     <Card className="shadow">
                     <CardHeader className="border-0">
                         <Row className="align-items-center">
@@ -67,8 +75,8 @@ const AnginMon = (uuid) => {
                         </tr>
                         </thead>
                         <tbody>
-                        { !loading && !error && data.data !== null && data.data.map((mon, i) => 
-                        <tr>
+                        { !monLoading && !monError && monitoring.data !== null && monitoring.data.map((mon, i) => 
+                        <tr key={i}>
                             <td>{mon}</td>
                             <td>-</td>
                         </tr>
@@ -77,6 +85,61 @@ const AnginMon = (uuid) => {
                     </Table>
                     </Card>
                 </Col>
+
+                { !idyLoading && !idyError && identity?.data !== null &&
+                <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+                <Card className="card shadow">
+                <CardHeader className="text-center">
+                    <div className="d-flex justify-content-between">
+                    <Button
+                        className="mr-4"
+                        color="info"
+                        href="#pablo"
+                        onClick={(e) => e.preventDefault()}
+                        size="sm"
+                    >
+                        Connect
+                    </Button>
+                    <Button
+                    className="float-right"
+                    color="default"
+                    href="#pablo"
+                    onClick={(e) => e.preventDefault()}
+                    size="sm"
+                  >
+                    Message
+                  </Button>
+                    </div>
+                </CardHeader>
+                <CardBody>
+                    <div className="text-center">
+                    <h3>
+                        {identity.data.nama}
+                        <span className="font-weight-light">, {identity.data.tipe_sensor.tipe}</span>
+                    </h3>
+                    <div className="h5 font-weight-300">
+                        <i className="ni location_pin mr-2" />
+                        Bucharest, Romania
+                    </div>
+                    <div className="h5 mt-4">
+                        <i className="ni business_briefcase-24 mr-2" />
+                        Solution Manager - Creative Tim Officer
+                    </div>
+                    <div>
+                        <i className="ni education_hat mr-2" />
+                        University of Computer Science
+                    </div>
+                    <hr className="my-4" />
+                    <p>
+                        {identity.data.keterangan === '' && "Tidak ada keterangan"}
+                        {identity.data.keterangan !== '' && identity.data.keterangan}
+                    </p>
+                    </div>
+                </CardBody>
+                </Card>
+            </Col>
+            }
+
             </Row>
             </Container>
         </>
