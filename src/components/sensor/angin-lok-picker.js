@@ -186,7 +186,7 @@ const AnginLokPicker = () => {
                 </thead>
                 <tbody>
                 {monitoringContext.list.map((mon, i) =>  
-                <tr>
+                <tr key={i}>
                     <th><a href={`?uuid=${mon.id}`}>{mon.nama}</a></th>
                     <td></td>
                     <td>{mon.keterangan}</td>
