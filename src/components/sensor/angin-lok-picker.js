@@ -1,5 +1,4 @@
 import {
-    Button,
     Card,
     CardHeader,
     CardBody,
@@ -8,6 +7,7 @@ import {
     Container,
     Row,
     Col,
+    Table,
 } from "reactstrap";
 
 import { useState } from "react";
@@ -26,23 +26,18 @@ const AnginLokPicker = () => {
         kecamatan: 'kecamatan',
         desa: 'desa'
     }
-
-    const [FormContext, setData] = useState({
-        desa: 0
-    })
-
-    
+ 
     const [lokContext, setLok] = useState({
+        size: 8,
         kabupaten: [],
         kecamatan: [],
         desa: []
     })
-    
-    const ChangeForm = (e) => {
-        const newData={...FormContext}
-        newData[e.target.id] = parseInt(e.target.value)
-        setData(newData)
-    }
+
+    const [monitoringContext, setMon] = useState({
+        waiting: true,
+        list: []
+    })
 
     const FetchLokasi = async (e, lokType) => {
         const newData={...lokContext}
@@ -51,33 +46,37 @@ const AnginLokPicker = () => {
         setLok(newData)
     }
 
+    const FetchMonitoring = async (e) => {
+        const newData={...monitoringContext}
+        try {
+            const resp = await api.get('/api/v1/monitoring/terdaftar?lokasi=' + e.target.value)
+            newData['list'] = resp.data.data
+        } finally {
+            const resize={...lokContext}
+            resize['size'] = 5
+            newData['waiting'] = false
+            setLok(resize)
+            setMon(newData)
+        }
+    }
+
     return (
         <>
         <Container className="mt--7" fluid>
             <Row>
-            <Col className="order-xl-1" xl="8">
+            <Col className="order-xl-1" xl={lokContext.size}>
                 <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
                     <Row className="align-items-center">
                     <Col xs="8">
-                        <h3 className="mb-0">Daftar Monitoring</h3>
+                        <h3 className="mb-0">Pilih Lokasi</h3>
                     </Col>
                     <Col className="text-right" xs="4">
-                        <Button
-                        color="primary"
-                        size="sm"
-                        href={`?mon=${FormContext.desa}`}
-                        >
-                        Kirim
-                        </Button>
                     </Col>
                     </Row>
                 </CardHeader>
                 <CardBody>
                     <Form>
-                    <h6 className="heading-small text-muted mb-4">
-                        Lokasi
-                    </h6>
                     <div className="pl-lg-4">
                         <Row>
                         <Col lg="6">
@@ -153,7 +152,7 @@ const AnginLokPicker = () => {
                             {!lokContext[lokSelector.desa].length && <p>Menunggu memilih kecamatan</p>}
 
                             {lokContext[lokSelector.desa]?.length !== 0 && 
-                            <select className="form-control" id="desa" onChange={(e) => ChangeForm(e)}>
+                            <select className="form-control" id="desa" onChange={(e) => FetchMonitoring(e)}>
                                 <option>-</option>
                                 {lokContext[lokSelector.desa].map((kab, i) => <option value={kab.id} key={i}>{`${kab.nama}`}</option>)}
                             </select>
@@ -166,6 +165,39 @@ const AnginLokPicker = () => {
                 </CardBody>
                 </Card>
             </Col>
+
+            { !monitoringContext.waiting && monitoringContext.list !== 0 &&
+            <Col xl="7">
+            <Card className="shadow">
+            <CardHeader className="border-0">
+                <Row className="align-items-center">
+                <div className="col">
+                    <h3 className="mb-0">Monitoring List</h3>
+                </div>
+                </Row>
+            </CardHeader>
+            <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                <tr>
+                    <th scope="col">Nama</th>
+                    <th scope="col">Total Data</th>
+                    <th scope="col">Keterangan</th>
+                </tr>
+                </thead>
+                <tbody>
+                {monitoringContext.list.map((mon, i) =>  
+                <tr>
+                    <th><a href={`?uuid=${mon.id}`}>{mon.nama}</a></th>
+                    <td></td>
+                    <td>{mon.keterangan}</td>
+                </tr>
+                )}
+                </tbody>
+            </Table>
+            </Card>
+        </Col>
+
+            }
             </Row>
         </Container>
         </>
