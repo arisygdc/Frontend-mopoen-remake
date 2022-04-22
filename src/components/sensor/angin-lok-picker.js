@@ -195,7 +195,7 @@ const AnginLokPicker = () => {
                 </tbody>
             </Table>
             </Card>
-        </Col>
+            </Col>
 
             }
             </Row>
