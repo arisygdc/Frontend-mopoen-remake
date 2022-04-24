@@ -14,7 +14,7 @@ import { useState } from "react";
 import api from 'api/monitoring'
 import useAxios from "hooks/useAxios";
 
-const AnginLokPicker = () => {
+const AnginLokPicker = (sensor_id) => {
     const [pData, pError, pLoading] = useAxios({
         axiosInstance: api,
         method: 'GET',
@@ -49,7 +49,7 @@ const AnginLokPicker = () => {
     const FetchMonitoring = async (e) => {
         const newData={...monitoringContext}
         try {
-            const resp = await api.get('/api/v1/monitoring/terdaftar?lokasi=' + e.target.value + '&sensor=1')
+            const resp = await api.get('/api/v1/monitoring/terdaftar?lokasi_id=' + e.target.value + '&sensor_id=' + sensor_id)
             newData['list'] = resp.data.data
         } finally {
             const resize={...lokContext}

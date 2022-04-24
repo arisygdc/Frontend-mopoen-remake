@@ -30,26 +30,25 @@ import {
 import useAxios from 'hooks/useAxios';
 import api from 'api/monitoring';
 
-const AnginMon = (uuid) => {
+const Survey = (uuid) => {
     const [monitoring, monError, monLoading] = useAxios({
         axiosInstance: api,
         method: 'GET',
-        url: 'api/v1/monitoring/value?uuid=' + uuid,
+        url: 'api/v1/monitoring/value/' + uuid,
     });
 
     const [identity, idyError, idyLoading] = useAxios({
         axiosInstance: api,
         method: 'GET',
-        url: 'api/v1/monitoring/terdaftar?uuid=' + uuid,
+        url: 'api/v1/monitoring/terdaftar/' + uuid,
     });
 
     const [analisa, anError, anLoading] = useAxios({
         axiosInstance: api,
         method: 'GET',
-        url: 'api/v1/monitoring/analisa?uuid=' + uuid,
+        url: 'api/v1/monitoring/analisa/' + uuid,
     });
 
-    console.log(identity)
     return (
         <>
             <Container className="mt--7" fluid>
@@ -125,12 +124,15 @@ const AnginMon = (uuid) => {
                     <hr className="my-4" />
                     <h3>Analisa Monitoring</h3>
                     { !anLoading && !anError && analisa.data !== null &&
-                    <Table borderless='yes'>
+                    <Table bordered={false} borderless={true}>
+                        <thead>
                         <tr>
                             <th></th>
                             <th>Jumlah</th>
                             <th>Rata-Rata</th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <tr>
                             <td>Pagi</td>
                             <td>{analisa.data.morning.total}</td>
@@ -161,6 +163,7 @@ const AnginMon = (uuid) => {
                             <td>{analisa.data.overall.total}</td>
                             <td>{analisa.data.overall.average}</td>
                         </tr>
+                        </tbody>
                     </Table>
                     }
                     </div>
@@ -175,4 +178,4 @@ const AnginMon = (uuid) => {
     )
 }
 
-export default AnginMon;
+export default Survey;

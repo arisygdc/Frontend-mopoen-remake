@@ -15,22 +15,29 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import SensorAngin from "views/sensor-angin";
+import Monitoring from "views/monitoring";
 import DaftarMonitoring from 'views/daftar-monitoring';
 
 var routes = [
-  {
-    path: "/sensor/angin",
-    name: "Sensor-Angin",
-    icon: "ni ni-tv-2 text-primary",
-    component: SensorAngin,
-    layout: "/admin",
-  },
   {
     path: "/monitoring-request",
     name: "Ajukan Monitoring",
     icon: "ni ni-single-02 text-yellow",
     component: DaftarMonitoring,
+    layout: "/admin",
+  },
+  {
+    path: "/sensor/tekanan-angin",
+    name: "Sensor Tekanan Angin",
+    icon: "ni ni-tv-2 text-primary",
+    component: Monitoring,
+    layout: "/admin",
+  },
+  {
+    path: "/sensor/debit-air",
+    name: "Sensor Debit Air",
+    icon: "ni ni-tv-2 text-primary",
+    component: Monitoring,
     layout: "/admin",
   },
 ];
