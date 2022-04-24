@@ -43,6 +43,12 @@ const AnginMon = (uuid) => {
         url: 'api/v1/monitoring/terdaftar?uuid=' + uuid,
     });
 
+    const [analisa, anError, anLoading] = useAxios({
+        axiosInstance: api,
+        method: 'GET',
+        url: 'api/v1/monitoring/analisa?uuid=' + uuid,
+    });
+
     console.log(identity)
     return (
         <>
@@ -54,16 +60,6 @@ const AnginMon = (uuid) => {
                         <Row className="align-items-center">
                         <div className="col">
                             <h3 className="mb-0">Monitoring</h3>
-                        </div>
-                        <div className="col text-right">
-                            <Button
-                            color="primary"
-                            href="#pablo"
-                            onClick={(e) => e.preventDefault()}
-                            size="sm"
-                            >
-                            See all
-                            </Button>
                         </div>
                         </Row>
                     </CardHeader>
@@ -77,8 +73,8 @@ const AnginMon = (uuid) => {
                         <tbody>
                         { !monLoading && !monError && monitoring.data !== null && monitoring.data.map((mon, i) => 
                         <tr key={i}>
-                            <td>{mon}</td>
-                            <td>-</td>
+                            <td>{mon.value}</td>
+                            <td>{mon.dibuat_pada}</td>
                         </tr>
                         )}
                         </tbody>
@@ -119,21 +115,54 @@ const AnginMon = (uuid) => {
                     </h3>
                     <div className="h5 font-weight-300">
                         <i className="ni location_pin mr-2" />
-                        Bucharest, Romania
-                    </div>
-                    <div className="h5 mt-4">
-                        <i className="ni business_briefcase-24 mr-2" />
-                        Solution Manager - Creative Tim Officer
+                        {`${identity.data.lokasi.provinsi}, ${identity.data.lokasi.kabupaten}, ${identity.data.lokasi.kecamatan}, ${identity.data.lokasi.desa}`}
                     </div>
                     <div>
                         <i className="ni education_hat mr-2" />
-                        University of Computer Science
-                    </div>
-                    <hr className="my-4" />
-                    <p>
                         {identity.data.keterangan === '' && "Tidak ada keterangan"}
                         {identity.data.keterangan !== '' && identity.data.keterangan}
-                    </p>
+                    </div>
+                    <hr className="my-4" />
+                    <h3>Analisa Monitoring</h3>
+                    { !anLoading && !anError && analisa.data !== null &&
+                    <Table borderless='yes'>
+                        <tr>
+                            <th></th>
+                            <th>Jumlah</th>
+                            <th>Rata-Rata</th>
+                        </tr>
+                        <tr>
+                            <td>Pagi</td>
+                            <td>{analisa.data.morning.total}</td>
+                            <td>{analisa.data.morning.average}</td>
+                        </tr>
+                        <tr>
+                            <td>Siang</td>
+                            <td>{analisa.data.noon.total}</td>
+                            <td>{analisa.data.noon.average}</td>
+                        </tr>
+                        <tr>
+                            <td>Sore</td>
+                            <td>{analisa.data.afternoon.total}</td>
+                            <td>{analisa.data.afternoon.average}</td>
+                        </tr>
+                        <tr>
+                            <td>Malam</td>
+                            <td>{analisa.data.night.total}</td>
+                            <td>{analisa.data.night.average}</td>
+                        </tr>
+                        <tr>
+                            <td>Tengah Malam</td>
+                            <td>{analisa.data.midnight.total}</td>
+                            <td>{analisa.data.midnight.average}</td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td>{analisa.data.overall.total}</td>
+                            <td>{analisa.data.overall.average}</td>
+                        </tr>
+                    </Table>
+                    }
                     </div>
                 </CardBody>
                 </Card>

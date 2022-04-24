@@ -49,7 +49,7 @@ const AnginLokPicker = () => {
     const FetchMonitoring = async (e) => {
         const newData={...monitoringContext}
         try {
-            const resp = await api.get('/api/v1/monitoring/terdaftar?lokasi=' + e.target.value)
+            const resp = await api.get('/api/v1/monitoring/terdaftar?lokasi=' + e.target.value + '&sensor=1')
             newData['list'] = resp.data.data
         } finally {
             const resize={...lokContext}
