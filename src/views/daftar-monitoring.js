@@ -26,8 +26,8 @@ const DaftarMonitoring = () => {
         return [Data, Error, Loading]
     }
 
-    const [mData, mError, mLoading] = CosumeApi(api, '/api/v1/sensors')
-    const [pData, pError, pLoading] = CosumeApi(api, '/api/v1/lokasi/provinsi')
+    const [mData, mError, mLoading] = CosumeApi(api, '/sensors')
+    const [pData, pError, pLoading] = CosumeApi(api, '/lokasi/provinsi')
     const lokSelector = {
         kabupaten: 'kabupaten',
         kecamatan: 'kecamatan',
