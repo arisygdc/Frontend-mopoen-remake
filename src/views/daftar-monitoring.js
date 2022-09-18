@@ -49,7 +49,7 @@ const DaftarMonitoring = () => {
 
     const PostForm = (e) => {
         e.preventDefault();
-        api.post('/api/v1/monitoring/daftar', {
+        api.post('/monitoring/daftar', {
             tipe_sensor: parseInt(FormContext.tipe_sensor),
             lokasi_id: parseInt(FormContext.desa),
             nama: FormContext.nama_monitoring,
@@ -66,7 +66,7 @@ const DaftarMonitoring = () => {
 
     const FetchLokasi = async (e, lokType) => {
         const newData={...lokContext}
-        const resp = await api.get('/api/v1/lokasi/' + lokType +'?depends=' + e.target.value)
+        const resp = await api.get('/lokasi/' + lokType +'?depends=' + e.target.value)
         newData[lokType] = resp.data.data
         setLok(newData)
     }

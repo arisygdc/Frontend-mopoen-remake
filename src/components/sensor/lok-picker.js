@@ -18,7 +18,7 @@ const AnginLokPicker = (sensor_id) => {
     const [pData, pError, pLoading] = useAxios({
         axiosInstance: api,
         method: 'GET',
-        url: 'api/v1/lokasi/provinsi',
+        url: '/lokasi/provinsi',
     });
 
     const lokSelector = {
@@ -41,7 +41,7 @@ const AnginLokPicker = (sensor_id) => {
 
     const FetchLokasi = async (e, lokType) => {
         const newData={...lokContext}
-        const resp = await api.get('/api/v1/lokasi/' + lokType +'?depends=' + e.target.value)
+        const resp = await api.get('/lokasi/' + lokType +'?depends=' + e.target.value)
         newData[lokType] = resp.data.data
         setLok(newData)
     }
@@ -49,7 +49,7 @@ const AnginLokPicker = (sensor_id) => {
     const FetchMonitoring = async (e) => {
         const newData={...monitoringContext}
         try {
-            const resp = await api.get('/api/v1/monitoring/terdaftar?lokasi_id=' + e.target.value + '&sensor_id=' + sensor_id)
+            const resp = await api.get('/monitoring/terdaftar?lokasi_id=' + e.target.value + '&sensor_id=' + sensor_id)
             newData['list'] = resp.data.data
         } finally {
             const resize={...lokContext}

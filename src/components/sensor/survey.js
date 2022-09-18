@@ -34,19 +34,19 @@ const Survey = (uuid) => {
     const [monitoring, monError, monLoading] = useAxios({
         axiosInstance: api,
         method: 'GET',
-        url: 'api/v1/monitoring/value/' + uuid,
+        url: '/monitoring/value/' + uuid,
     });
 
     const [identity, idyError, idyLoading] = useAxios({
         axiosInstance: api,
         method: 'GET',
-        url: 'api/v1/monitoring/terdaftar/' + uuid,
+        url: '/monitoring/terdaftar/' + uuid,
     });
 
     const [analisa, anError, anLoading] = useAxios({
         axiosInstance: api,
         method: 'GET',
-        url: 'api/v1/monitoring/analisa/' + uuid,
+        url: '/monitoring/analisa/' + uuid,
     });
 
     return (
